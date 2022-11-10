@@ -4,8 +4,12 @@ set -eu
 
 MATOMO_VERSION=$(cat ./bin/version)
 MATOMO_DOWNLOADS="$1/downloads"
+MATOMO_MISC="$1/misc"
 MATOMO_ZIP="$MATOMO_DOWNLOADS/matomo.zip"
 MATOMO_URL="https://builds.matomo.org/matomo-$MATOMO_VERSION.zip"
+GEOIP_DB_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=$MAXMIND_LICENSE_KEY&suffix=tar.gz"
+GEOIP_DB_ZIP="$MATOMO_DOWNLOADS/geolite2.tar.gz"
+GEOIP_DB_FILE="GeoLite2-City.mmdb"
 
 mkdir -p "$MATOMO_DOWNLOADS"
 
@@ -16,6 +20,14 @@ echo "done"
 echo -n "-----> Extracting ZIP... "
 unzip -q "$MATOMO_ZIP" -d "$MATOMO_DOWNLOADS"
 mv "$MATOMO_DOWNLOADS/matomo"/* "$1"
+echo "done"
+
+echo -n "-----> Downloading GEOIP database..."
+curl -s --retry 3 -o "$GEOIP_DB_ZIP" -L "$GEOIP_DB_URL"
+
+echo -n "-----> Extracting database... "
+tar -xf "$GEOIP_DB_ZIP" --strip-components=1 -C "$MATOMO_DOWNLOADS"
+mv "$MATOMO_DOWNLOADS/$GEOIP_DB_FILE" "$MATOMO_MISC"
 echo "done"
 
 echo -n "-----> Deleting downloads directory... "
