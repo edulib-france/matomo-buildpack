@@ -1,0 +1,6 @@
+{
+    "QueuedTracking": {
+        "MultipleServersOnlyConfigurableIfSentinelEnabled": "複数のホストまたはポートは、Redis Sentinel がオンの場合にのみ構成できます。 プラグインの README にその方法が記載されています。",
+        "NumHostsNotMatchNumPorts": "構成されたホスト数が、構成済みのポート数と一致しません。"
+    }
+}

@@ -1,0 +1,6 @@
+{
+    "QueuedTracking": {
+        "MultipleServersOnlyConfigurableIfSentinelEnabled": "Disa strehë ose porta njëherësh mund të formësohen vetëm kur Redis Sentinel është i aktivizuar. README i shtojcës do t’ju mësojë si ta bëni.",
+        "NumHostsNotMatchNumPorts": "Numri i strehëve të formësuara nuk përputhet me numrin e portave të formësuara."
+    }
+}

@@ -1,0 +1,6 @@
+{
+    "QueuedTracking": {
+        "MultipleServersOnlyConfigurableIfSentinelEnabled": "Vários hosts ou portas só podem ser configurados quando o Redis Sentinel está ativado. O plugin README lhe dirá como fazer isso.",
+        "NumHostsNotMatchNumPorts": "O número de servidores configurados não coincide com o número de portas configuradas."
+    }
+}
