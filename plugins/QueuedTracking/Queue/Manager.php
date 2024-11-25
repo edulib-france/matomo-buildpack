@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Matomo - free/libre analytics platform
  *
@@ -6,6 +7,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
  *
  */
+
 namespace Piwik\Plugins\QueuedTracking\Queue;
 
 use Piwik\Exception\InvalidRequestParameterException;
@@ -107,7 +109,6 @@ class Manager
             $queue = $this->createQueue($queueId);
 
             while ($requestSets = $queue->getRequestSetsToProcess()) {
-
                 foreach ($requestSets as $requestSet) {
                     $this->addRequestSetToQueues($requestSet);
                 }
@@ -213,12 +214,14 @@ class Manager
 
     protected function getQueueIdForVisitor($visitorId)
     {
-        $visitorId = strtolower(substr($visitorId, 0, 1));
-
-        if (isset($this->mappingLettersToNumeric[$visitorId])) {
-            $id = $this->mappingLettersToNumeric[$visitorId];
+        $visitorId = strtolower(substr($visitorId, 0, 3));
+        if (ctype_xdigit($visitorId) === true) {
+            $id = hexdec($visitorId);
         } else {
-            $id = ord($visitorId);
+            $pos1 = ord($visitorId);
+            $pos2 = isset($visitorId[1]) ? ord($visitorId[1]) : $pos1;
+            $pos3 = isset($visitorId[2]) ? ord($visitorId[2]) : $pos2;
+            $id = $pos1 + $pos2 + $pos3;
         }
 
         return $id % $this->numQueuesAvailable;
@@ -261,7 +264,7 @@ class Manager
             if ($shouldProcess && $this->lock->acquireLock($this->forceQueueId)) {
                 return $queue;
             }
-            
+
             // do not try to acquire a different lock
             return;
         }

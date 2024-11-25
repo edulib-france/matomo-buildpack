@@ -5,7 +5,7 @@
  * Description: Reports the Internet Service Provider of the visitors.
  * Author: Matomo
  * Author URI: https://matomo.org
- * Version: 4.0.5
+ * Version: 5.0.3
  */
 ?><?php
 

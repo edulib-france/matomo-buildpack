@@ -1,5 +1,19 @@
 ## Changelog
 
+### 5.0.3
+* Added plugin category for Marketplace
+
+### 5.0.2
+* Fixes empty label causing archiving to fail
+
+### 5.0.1
+
+* Compatibility with Matomo 5.0.0-b4
+
+### 5.0.0
+
+* Compatibility with Matomo 5
+
 ### 4.0.5
 
 * Remove code for event that does no longer exist

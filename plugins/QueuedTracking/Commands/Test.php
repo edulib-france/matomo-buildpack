@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Matomo - free/libre analytics platform
  *
@@ -12,8 +13,6 @@ use Piwik\Application\Environment;
 use Piwik\Plugin\ConsoleCommand;
 use Piwik\Plugins\QueuedTracking\SystemCheck;
 use Piwik\Tracker;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Piwik\Plugins\QueuedTracking\Queue;
 
 /**
@@ -32,6 +31,7 @@ class Test extends ConsoleCommand
     protected function configure()
     {
         $this->setName('queuedtracking:test');
+        $this->addRequiredValueOption('skip-max-memory-config-check', null, 'Do not check for MaxMemory config values ');
         $this->setDescription('Test your Redis connection get some information about your current system.');
     }
 
@@ -45,11 +45,17 @@ class Test extends ConsoleCommand
      * execute the task by calling a method of another class and output any useful information.
      *
      * Execute the command like: ./console queuedtracking:test --name="The Piwik Team"
+     * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+
+    protected function doExecute(): int
     {
+        $input = $this->getInput();
+        $output = $this->getOutput();
         $trackerEnvironment = new Environment('tracker');
         $trackerEnvironment->init();
+
+        $shouldSkipCheckingMemoryConfigValues = $input->getOption('skip-max-memory-config-check');
 
         $settings = Queue\Factory::getSettings();
         $isUsingRedis = $settings->isRedisBackend();
@@ -70,7 +76,7 @@ class Test extends ConsoleCommand
         $output->writeln('Timeout: ' . $settings->redisTimeout->getValue());
         $output->writeln('Password: ' . $settings->redisPassword->getValue());
         $output->writeln('Database: ' . $settings->redisDatabase->getValue());
-        $output->writeln('UseSentinelBackend: ' . (int) $settings->useSentinelBackend->getValue());
+        $output->writeln('RedisBackendType: ' . $settings->getRedisType());
         $output->writeln('SentinelMasterName: ' . $settings->sentinelMasterName->getValue());
 
         $output->writeln('');
@@ -86,7 +92,7 @@ class Test extends ConsoleCommand
 
                 $extension = new \ReflectionExtension('redis');
                 $output->writeln('PHPRedis version: ' . $extension->getVersion());
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 $output->writeln('No PHPRedis extension (not a problem if sentinel is used):' . $e->getMessage());
             }
         }
@@ -101,13 +107,15 @@ class Test extends ConsoleCommand
         $output->writeln('Memory: ' . var_export($backend->getMemoryStats(), 1));
 
         $redis = $backend->getConnection();
-        if ($isUsingRedis) {
-
+        if ($isUsingRedis && !$shouldSkipCheckingMemoryConfigValues) {
             $evictionPolicy = $this->getRedisConfig($redis, 'maxmemory-policy');
             $output->writeln('MaxMemory Eviction Policy config: ' . $evictionPolicy);
 
             if ($evictionPolicy !== 'allkeys-lru' && $evictionPolicy !== 'noeviction') {
-                $output->writeln('<error>The eviction policy can likely lead to errors when memory is low. We recommend to use eviction policy <comment>allkeys-lru</comment> or alternatively <comment>noeviction</comment>. Read more here: http://redis.io/topics/lru-cache</error>');
+                $output->writeln(
+                    '<error>The eviction policy can likely lead to errors when memory is low. We recommend to use eviction policy <comment>allkeys-lru</comment> or alternatively <comment>noeviction</comment>.' .
+                    ' Read more here: http://redis.io/topics/lru-cache</error>'
+                );
             }
 
             $evictionPolicy = $this->getRedisConfig($redis, 'maxmemory');
@@ -121,25 +129,25 @@ class Test extends ConsoleCommand
             $output->writeln('Redis is connected: ' . (int) $redis->isConnected());
         }
 
-        if ($backend->testConnection()){
+        if ($backend->testConnection()) {
             $output->writeln('Connection works in general');
         } else {
             $output->writeln('Connection does not actually work: ' . $redis->getLastError());
         }
 
         if ($isUsingRedis) {
-            $this->testRedis($redis, 'set', array('testKey', 'value'), 'testKey', $output);
-            $this->testRedis($redis, 'setnx', array('testnxkey', 'value'), 'testnxkey', $output);
-            $this->testRedis($redis, 'setex', array('testexkey', 5, 'value'), 'testexkey', $output);
-            $this->testRedis($redis, 'set', array('testKeyWithNx', 'value', array('nx')), 'testKeyWithNx', $output);
-            $this->testRedis($redis, 'set', array('testKeyWithEx', 'value', array('ex' => 5)), 'testKeyWithEx', $output);
+            $this->testRedis($redis, 'set', ['testKey', 'value'], 'testKey');
+            $this->testRedis($redis, 'setnx', array('testnxkey', 'value'), 'testnxkey');
+            $this->testRedis($redis, 'setex', array('testexkey', 5, 'value'), 'testexkey');
+            $this->testRedis($redis, 'set', array('testKeyWithNx', 'value', array('nx')), 'testKeyWithNx');
+            $this->testRedis($redis, 'set', array('testKeyWithEx', 'value', array('ex' => 5)), 'testKeyWithEx');
         }
 
         $backend->delete('foo');
         if (!$backend->setIfNotExists('foo', 'bar', 5)) {
             $message = "setIfNotExists(foo, bar, 1) does not work, most likely we won't be able to acquire a lock: " . $backend->getLastError();
             $output->writeln($message);
-        } else{
+        } else {
             $initialTtl = $backend->getTimeToLive('foo');
             if ($initialTtl >= 3000 && $initialTtl <= 5000) {
                 $output->writeln('Initial expire seems to be set correctly');
@@ -190,7 +198,6 @@ class Test extends ConsoleCommand
         $backend->appendValuesToList('fooList', array('value1', 'value2', 'value3'));
         $values = $backend->getFirstXValuesFromList('fooList', 2);
         if ($values == array('value1', 'value2')) {
-
             $backend->removeFirstXValuesFromList('fooList', 1);
             $backend->removeFirstXValuesFromList('fooList', 1);
             $values = $backend->getFirstXValuesFromList('fooList', 2);
@@ -199,7 +206,6 @@ class Test extends ConsoleCommand
             } else {
                 $output->writeln('List feature seems to work only partially: ' . var_export($values, 1));
             }
-
         } else {
             $output->writeln('<error>List feature seems to not work fine: ' . $redis->getLastError() . '</error>');
         }
@@ -207,7 +213,7 @@ class Test extends ConsoleCommand
         $output->writeln('');
         $output->writeln('<comment>Done</comment>');
 
-        return 0;
+        return self::SUCCESS;
     }
 
     /**
@@ -217,9 +223,14 @@ class Test extends ConsoleCommand
      */
     private function getRedisConfig($redis, $configName)
     {
-        $config = $redis->config('GET', $configName);
-        $value = strtolower(array_shift($config));
+        if ($redis instanceof \RedisCluster) {
+            $config = $redis->config('CONFIG', 'GET', $configName);
+            unset($config[0]);
+        } else {
+            $config = $redis->config('GET', $configName);
+        }
 
+        $value = strtolower(array_shift($config));
         return $value;
     }
 
@@ -228,9 +239,8 @@ class Test extends ConsoleCommand
      * @param $method
      * @param $params
      * @param $keyToCleanUp
-     * @param OutputInterface $output
      */
-    private function testRedis($redis, $method, $params, $keyToCleanUp, OutputInterface $output)
+    private function testRedis($redis, $method, $params, $keyToCleanUp)
     {
         if ($keyToCleanUp) {
             $redis->del($keyToCleanUp);
@@ -238,20 +248,20 @@ class Test extends ConsoleCommand
 
         $result = call_user_func_array(array($redis, $method), $params);
 
-        $paramsMapped = array_map(function($item) {
+        $paramsMapped = array_map(function ($item) {
             if (is_string($item)) {
                 return $item;
             }
-            
+
             return str_replace(["\r", "\n", "  "], '', var_export($item, true));
         }, $params);
         $paramsInline = implode(', ', $paramsMapped);
 
         if ($result) {
-            $output->writeln("Success for method $method($paramsInline)");
+            $this->getOutput()->writeln("Success for method $method($paramsInline)");
         } else {
             $errorMessage = $redis->getLastError();
-            $output->writeln("<error>Failure for method $method($paramsInline): $errorMessage</error>");
+            $this->getOutput()->writeln("<error>Failure for method $method($paramsInline): $errorMessage</error>");
         }
 
         if ($keyToCleanUp) {

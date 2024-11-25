@@ -5,9 +5,10 @@
  * Description: Scale your large traffic Matomo service by queuing tracking requests in Redis or MySQL for better performance and reliability when experiencing peaks.
  * Author: Matomo
  * Author URI: https://matomo.org
- * Version: 4.0.7
+ * Version: 5.1.1
  */
 ?><?php
+
 /**
  * Matomo - free/libre analytics platform
  *
@@ -15,6 +16,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
  *
  */
+
 namespace Piwik\Plugins\QueuedTracking;
 
 use Piwik\Common;
@@ -102,5 +104,4 @@ class QueuedTracking extends \Piwik\Plugin
             }
         }
     }
-
 }

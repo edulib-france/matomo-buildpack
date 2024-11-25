@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Matomo - free/libre analytics platform
  *
@@ -6,6 +7,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
  *
  */
+
 namespace Piwik\Plugins\QueuedTracking\Queue\Backend;
 
 use Piwik\Log;
@@ -39,7 +41,7 @@ class Sentinel extends Redis
 
                 if (!empty($master)) {
                     if (!class_exists('\Redis') && $this->timeout == 0) {
-                        $this->timeout === 0.05;
+                        $this->timeout = 0.05;
                     }
 
                     $client = new \Credis_Client($master[0], $master[1], $this->timeout, $persistent = false, $this->database, $this->password);
@@ -49,7 +51,6 @@ class Sentinel extends Redis
 
                     return true;
                 }
-
             } catch (Exception $e) {
                 Log::debug($e->getMessage());
             }
@@ -67,5 +68,4 @@ class Sentinel extends Redis
     {
         return $this->redis->eval($script, $keys, $args);
     }
-
 }

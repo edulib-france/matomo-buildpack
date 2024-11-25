@@ -11,12 +11,11 @@
 namespace Piwik\Plugins\QueuedTracking\Queue\Backend;
 
 use Piwik\Log;
-use Piwik\Plugins\QueuedTracking\Queue\Backend;
 
-class Redis implements Backend
+class RedisCluster extends Redis
 {
     /**
-     * @var \Redis
+     * @var \RedisCluster
      */
     protected $redis;
     protected $host;
@@ -33,7 +32,7 @@ class Redis implements Backend
     {
         try {
             $this->connectIfNeeded();
-            return 'TEST' === $this->redis->echo('TEST');
+            return 'TEST' === $this->redis->echo('TEST_ECHO', 'TEST');
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
         }
@@ -63,11 +62,44 @@ class Redis implements Backend
         return $this->redis->getLastError();
     }
 
+    /**
+     * Returns converted bytes to B,K,M,G,T.
+     * @param int|float|double $bytes byte number.
+     * @param int $precision decimal round.
+     * * @return string
+     */
+    private function formatBytes($bytes, $precision = 2)
+    {
+        $units = array('B', 'K', 'M', 'G', 'T');
+
+        $bytes = max($bytes, 0);
+        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+        $pow = min($pow, count($units) - 1);
+        $bytes /= (1 << (10 * $pow));
+
+        return round($bytes, $precision) . $units[$pow];
+    }
+
     public function getMemoryStats()
     {
         $this->connectIfNeeded();
 
-        $memory = $this->redis->info('memory');
+        $hosts = explode(',', $this->host);
+        $ports = explode(',', $this->port);
+
+        $memory = array (
+            'used_memory_human' => 0,
+            'used_memory_peak_human' => 0
+        );
+
+        foreach ($hosts as $idx => $host) {
+            $info = $this->redis->info(array($host, (int)$ports[$idx]), 'memory');
+            $memory['used_memory_human'] += $info['used_memory'] ?? 0;
+            $memory['used_memory_peak_human'] += $info['used_memory_peak'] ?? 0;
+        }
+
+        $memory['used_memory_human'] = $this->formatBytes($memory['used_memory_human']);
+        $memory['used_memory_peak_human'] = $this->formatBytes($memory['used_memory_peak_human']);
 
         return $memory;
     }
@@ -170,7 +202,7 @@ class Redis implements Backend
 
     /**
      * @internal for tests only
-     * @return \Redis
+     * @return \RedisCluster
      */
     public function getConnection()
     {
@@ -215,7 +247,7 @@ end';
     {
         $this->connectIfNeeded();
 
-        return $this->redis->keys($pattern) ?: [];
+        return $this->redis->keys($pattern);
     }
 
     public function expireIfKeyHasValue($key, $value, $ttlInSeconds)
@@ -248,7 +280,13 @@ end';
     public function flushAll()
     {
         $this->connectIfNeeded();
-        $this->redis->flushDB();
+
+        $hosts = explode(',', $this->host);
+        $ports = explode(',', $this->port);
+
+        foreach ($hosts as $idx => $host) {
+            $this->redis->flushDB(array($host, (int)$ports[$idx]));
+        }
     }
 
     private function connectIfNeeded()
@@ -260,18 +298,21 @@ end';
 
     protected function connect()
     {
-        $this->redis = new \Redis();
-        $success = $this->redis->connect($this->host, $this->port, $this->timeout, null, 100);
+        $hosts = explode(',', $this->host);
+        $ports = explode(',', $this->port);
 
-        if ($success && !empty($this->password)) {
-            $success = $this->redis->auth($this->password);
+        if (count($hosts) !== count($ports)) {
+            throw new Exception(Piwik::translate('QueuedTracking_NumHostsNotMatchNumPorts'));
         }
 
-        if (!empty($this->database) || 0 === $this->database) {
-            $this->redis->select($this->database);
-        }
+        $hostsPorts = array_map(fn($host, $port): string => "$host:$port", $hosts, $ports);
 
-        return $success;
+        try {
+            $this->redis = new \RedisCluster(null, $hostsPorts, $this->timeout, $this->timeout, true, $this->password);
+            return true;
+        } catch (Exception $e) {
+            throw new Exception('Could not connect to redis cluster: ' . $e->getMessage());
+        }
     }
 
     public function setConfig($host, $port, $timeout, $password)

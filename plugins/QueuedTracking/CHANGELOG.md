@@ -1,5 +1,38 @@
 ## Changelog
 
+5.1.1 - 2021-10-23
+- Fixed fatal error when running queuedtracking:monitor command on Windows
+
+5.1.0 - 2021-10-21
+- Increased number of queue tracking workers to 4096
+- Enhance queue monitor and process commands
+- Added Redis cluster option 
+
+5.0.7 - 2024-08-26
+- Fixed old redis sentinel config issue
+
+5.0.6
+- Fixed unable to configure redis socket with port 0
+
+5.0.5
+- Improved plugin reliability
+- Added system settings to list of text that can be translated
+
+5.0.4
+- Added plugin category for Marketplace
+
+5.0.3
+- Added code to skip maxmemory config check when --skip-max-memory-config-check=1
+
+5.0.2
+- Fix merge issue in previous release
+
+5.0.1
+- Compatibility with Matomo 5.0.0-b4
+
+5.0.0
+- Compatibility with Matomo 5.0
+ 
 4.0.7
 - Improved error handling for tracking requests
 
