@@ -26,7 +26,7 @@ class SetLicenseKey extends ConsoleCommand
         $this->addOption('licenseKey', null, InputOption::VALUE_REQUIRED, 'License key');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function doExecute(InputInterface $input, OutputInterface $output)
     {
         $licenseKey = trim($input->getOption('licenseKey'));
 

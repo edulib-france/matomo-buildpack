@@ -32,7 +32,7 @@ class CreateSite extends ConsoleCommand
             'If the site is an ecommerce website');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function doExecute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getOption('name');
         $url = $input->getOption('url');

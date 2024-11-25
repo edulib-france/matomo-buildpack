@@ -25,7 +25,7 @@ class CreateTables extends ConsoleCommand
         $this->setDescription('Create all database tables');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function doExecute(InputInterface $input, OutputInterface $output)
     {
         try {
             DbHelper::createTables();

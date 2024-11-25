@@ -32,7 +32,7 @@ class CreateSuperuser extends ConsoleCommand
             'Password for new superuser');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function doExecute(InputInterface $input, OutputInterface $output)
     {
         $login = $input->getOption('login');
         $email = $input->getOption('email');
