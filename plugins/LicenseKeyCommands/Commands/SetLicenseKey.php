@@ -23,7 +23,7 @@ class SetLicenseKey extends ConsoleCommand
     {
         $this->setName('license:set');
         $this->setDescription('Set license key');
-        $this->addOption('licenseKey', null, InputOption::VALUE_REQUIRED, 'License key');
+        $this->addRequiredValueOption('licenseKey', null, 'License key');
     }
 
     protected function doExecute(): int

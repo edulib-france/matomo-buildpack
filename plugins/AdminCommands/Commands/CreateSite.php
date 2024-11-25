@@ -24,12 +24,9 @@ class CreateSite extends ConsoleCommand
     {
         $this->setName('admin:create-site');
         $this->setDescription('Create a site this instance of matomo');
-        $this->addOption('name', null, InputOption::VALUE_REQUIRED,
-            'Name of the site');
-        $this->addOption('url', null, InputOption::VALUE_REQUIRED,
-            'URL to the website');
-        $this->addOption('ecommerce', null, InputOption::VALUE_NONE | InputOption::VALUE_OPTIONAL,
-            'If the site is an ecommerce website');
+        $this->addRequiredValueOption('name', null, 'Name of the site');
+        $this->addRequiredValueOption('url', null, 'URL to the website');
+        $this->addOptionalValueOption('ecommerce', null, 'If the site is an ecommerce website');
     }
 
     protected function doExecute(): int

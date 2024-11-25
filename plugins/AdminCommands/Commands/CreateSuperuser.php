@@ -24,12 +24,9 @@ class CreateSuperuser extends ConsoleCommand
     {
         $this->setName('admin:create-superuser');
         $this->setDescription('Create a superuser for this instance of matomo');
-        $this->addOption('login', null, InputOption::VALUE_REQUIRED,
-            'Login for new superuser');
-        $this->addOption('email', null, InputOption::VALUE_REQUIRED,
-            'Email for new superuser');
-        $this->addOption('password', null, InputOption::VALUE_REQUIRED,
-            'Password for new superuser');
+        $this->addRequiredValueOption('login', null, 'Login for new superuser');
+        $this->addRequiredValueOption('email', null, 'Email for new superuser');
+        $this->addRequiredValueOption('password', null, 'Password for new superuser');
     }
 
     protected function doExecute(): int
