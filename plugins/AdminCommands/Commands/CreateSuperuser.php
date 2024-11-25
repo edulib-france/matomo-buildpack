@@ -32,7 +32,7 @@ class CreateSuperuser extends ConsoleCommand
             'Password for new superuser');
     }
 
-    protected function doExecute()
+    protected function doExecute(): int
     {
         $input = $this->getInput();
         $output = $this->getOutput();
@@ -49,9 +49,11 @@ class CreateSuperuser extends ConsoleCommand
         } catch (\Exception $ex) {
             $output->writeln("");
 
-            throw $ex;
+            return self::FAILURE;
         }
 
         $this->writeSuccessMessage($output, array("Successfully created superuser " . $login . " (" . $email . ")"));
+
+        return self::SUCCESS;
     }
 }

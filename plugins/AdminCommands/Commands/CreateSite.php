@@ -32,7 +32,7 @@ class CreateSite extends ConsoleCommand
             'If the site is an ecommerce website');
     }
 
-    protected function doExecute()
+    protected function doExecute(): int
     {
         $input = $this->getInput();
         $output = $this->getOutput();
@@ -47,10 +47,12 @@ class CreateSite extends ConsoleCommand
         } catch (\Exception $ex) {
             $output->writeln("");
 
-            throw $ex;
+            return self::FAILURE;
         }
 
         $this->writeSuccessMessage($output, array("Successfully created site " . $name . " (" . $url . ")"));
         $this->writeSuccessMessage($output, array("Think to add " . $url . " hostname to trusted hosts."));
+
+        return self::SUCCESS;
     }
 }
