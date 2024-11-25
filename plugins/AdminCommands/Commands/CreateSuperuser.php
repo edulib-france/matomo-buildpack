@@ -32,8 +32,10 @@ class CreateSuperuser extends ConsoleCommand
             'Password for new superuser');
     }
 
-    protected function doExecute(InputInterface $input, OutputInterface $output)
+    protected function doExecute()
     {
+        $input = $this->getInput();
+        $output = $this->getOutput();
         $login = $input->getOption('login');
         $email = $input->getOption('email');
         $password = $input->getOption('password');
