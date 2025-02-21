@@ -20,35 +20,6 @@ function matomo::get_latest_github_version() {
   return "${rc}"
 }
 
-function metabase::download() {
-  local rc=1
-
-  local version="${1}"
-  local cache_dir="${2}"
-  local variant="${3}"
-
-  local cached_file
-  local url
-  local path="${version}"
-  local file_prefix="${version}"
-
-
-  if [[ ! -z $variant ]]; then
-    path="${variant}/${version}"
-    file_prefix="${variant}-${version}"
-  fi
-
-  cached_file="${cache_dir}/metabase-${file_prefix}.jar"
-  url="https://downloads.metabase.com/${path}/metabase.jar"
-
-  if curl --silent --location --fail "${url}" --output "${cached_file}"; then
-    rc=0
-    echo "${cached_file}"
-  fi
-
-  return "${rc}"
-}
-
 matomo_version="${MATOMO_VERSION:-"*"}"
 
 # If version is given as '*' or 'latest', try to retrieve the latest version number:
