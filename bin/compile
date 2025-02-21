@@ -2,7 +2,7 @@
 
 set -eu
 
-MATOMO_VERSION=$(cat ./bin/version)
+MATOMO_VERSION="${MATOMO_VERSION:-$(cat ./bin/version)}"
 MATOMO_DOWNLOADS="$1/downloads"
 MATOMO_MISC="$1/misc"
 MATOMO_ZIP="$MATOMO_DOWNLOADS/matomo.zip"
