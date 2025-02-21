@@ -2,11 +2,70 @@
 
 set -eu
 
-MATOMO_VERSION="${MATOMO_VERSION:-$(cat ./bin/version)}"
+function matomo::get_latest_github_version() {
+  local rc=1
+
+  local repo
+  local api_url
+  local version
+
+  repo="matomo-org/matomo"
+  api_url="https://api.github.com/repos/${repo}/releases/latest"
+
+  if version="$( curl --silent --location --fail "${api_url}" | jq -r .tag_name )"; then
+    echo "${version}"
+    rc=0
+  fi
+
+  return "${rc}"
+}
+
+function metabase::download() {
+  local rc=1
+
+  local version="${1}"
+  local cache_dir="${2}"
+  local variant="${3}"
+
+  local cached_file
+  local url
+  local path="${version}"
+  local file_prefix="${version}"
+
+
+  if [[ ! -z $variant ]]; then
+    path="${variant}/${version}"
+    file_prefix="${variant}-${version}"
+  fi
+
+  cached_file="${cache_dir}/metabase-${file_prefix}.jar"
+  url="https://downloads.metabase.com/${path}/metabase.jar"
+
+  if curl --silent --location --fail "${url}" --output "${cached_file}"; then
+    rc=0
+    echo "${cached_file}"
+  fi
+
+  return "${rc}"
+}
+
+matomo_version="${MATOMO_VERSION:-"*"}"
+
+# If version is given as '*' or 'latest', try to retrieve the latest version number:
+if [ "${matomo_version}" = "*" ] || [ "${matomo_version}" = "latest" ]; then
+  if ! matomo_version="$( matomo::get_latest_github_version )"; then
+    echo "Unable to retrieve Matomo latest version number." >&2
+    echo "This is probably due to the GitHub API rate-limit." >&2
+    echo "Please try to set 'MATOMO_VERSION' to the desired version." >&2
+    echo "Aborting." >&2
+    exit 1
+  fi
+fi
+
 MATOMO_DOWNLOADS="$1/downloads"
 MATOMO_MISC="$1/misc"
 MATOMO_ZIP="$MATOMO_DOWNLOADS/matomo.zip"
-MATOMO_URL="https://builds.matomo.org/matomo-$MATOMO_VERSION.zip"
+MATOMO_URL="https://builds.matomo.org/matomo-$matomo_version.zip"
 GEOIP_DB_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=$MAXMIND_LICENSE_KEY&suffix=tar.gz"
 GEOIP_DB_ZIP="$MATOMO_DOWNLOADS/geolite2.tar.gz"
 GEOIP_DB_FILE="GeoLite2-City.mmdb"
