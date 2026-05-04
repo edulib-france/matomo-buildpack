@@ -1,5 +1,14 @@
 ## Changelog
 
+### 5.0.6 - 2026-04-27
+* Updated API documentation
+
+### 5.0.5 - 2026-03-02
+* Updated API documentation
+
+### 5.0.4
+* Added missing license file
+
 ### 5.0.3
 * Added plugin category for Marketplace
 
