@@ -1,9 +1,19 @@
 ## Changelog
 
-5.1.1 - 2021-10-23
+5.2.0 - 2025-11-25
+- No longer disable Provider plugin automatically. If performance issues occur, please disable it manually or install an ASN geolocation database (https://matomo.org/faq/how-to/setting-up-accurate-visitors-geolocation/).
+
+5.1.3 - 2025-09-01
+- Add support for Sentinel password
+- Security hardening
+
+5.1.2 - 2025-07-07
+- Textual changes
+
+5.1.1 - 2024-10-23
 - Fixed fatal error when running queuedtracking:monitor command on Windows
 
-5.1.0 - 2021-10-21
+5.1.0 - 2024-10-21
 - Increased number of queue tracking workers to 4096
 - Enhance queue monitor and process commands
 - Added Redis cluster option 
