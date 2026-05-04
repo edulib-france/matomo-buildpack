@@ -1,0 +1,21 @@
+{
+    "InvalidateReports": {
+        "InvalidateReports": "raporları geçersiz kıl",
+        "InvalidateHistoricalReports": "Geçmiş raporlarını geçersiz kıl",
+        "PageDescription": "Sitelerin tümü ya da beliri biri için tüm geçmiş raporları \"Geçmiş raporlarını geçersiz kıl\" düğmesine tıklanarak geçersiz kılınabilir. Bu raporlar arşivleme işleminin bir sonraki çalışmasında ham günlük kayıtlarından yeniden işlenir. Bu seçenek tüm geçmiş Matomo raporlarının yeniden işlenmesi istenilen şu gibi durumlarda işe yarar:",
+        "ExamplesCustomReports": "yeni bir %1$sözel rapor%2$s eklendiğinde ve içindeki tüm geçmiş verilerin işlenmesi istendiğinde",
+        "ExamplesFunnels": "yeni bir %1$sHuni%2$s eklendiğinde ve içindeki tüm geçmiş verilerin işlenmesi istendiğinde",
+        "ExamplesRawData": "ham ziyaretçi bilgileri değiştirildiğinde (%1$s yeni ziyaretçi günlüğü kayıtlarının içe aktarılması%2$s gibi) ve bu ham günlük kayıtlarındaki değişikliklerin tüm raporlara yansıtılması istendiğinde.",
+        "AllWebsites": "tüm siteler",
+        "AllSegments": "tüm dilimler",
+        "ChooseSegment": "Dilim seçin",
+        "ChooseWebsite": "Siteyi seçin",
+        "ChooseRange": "Verilerin ne kadar geriye doğru geçersiz kılınacağını seçin",
+        "AllData": "tüm geçmiş veriler",
+        "XMonths": "son %1$s ay",
+        "LastMonth": "geçen ay",
+        "InvalidationSuccess": "Raporlar geçersiz kılındı. Rapor arşivleme görevinin bir sonraki yürütülmesinde yeniden işlenecekler.",
+        "InvalidateAPIReturn": "CoreAdminHome.invalidateArchivedReports API yanıtı:",
+        "ConfirmInvalidation": "%1$s ve %2$s için tüm geçmiş raporlarının geçersiz kılınmasını istiyor musunuz? (Bu işlem arşivleme görevinin bir sonraki yürütülmesinde tüm geçmiş raporlarının Matomo tarafından yeniden işlenmesine neden olur ve uzun zaman alabilir.)"
+    }
+}

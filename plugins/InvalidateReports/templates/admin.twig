@@ -1,0 +1,12 @@
+{% extends 'admin.twig' %}
+
+{% set title %}{{ 'InvalidateReports_InvalidateHistoricalReports'|translate }}{% endset %}
+
+{% block content %}
+
+<div
+    vue-entry="InvalidateReports.InvalidateReportsPage"
+    available-ranges="{{ availableRanges|default(null)|json_encode }}"
+></div>
+
+{% endblock %}

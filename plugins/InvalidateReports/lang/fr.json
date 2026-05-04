@@ -1,0 +1,21 @@
+{
+    "InvalidateReports": {
+        "InvalidateReports": "Invalider les rapports",
+        "InvalidateHistoricalReports": "Invalider les rapports historiques",
+        "PageDescription": "Vous pouvez invalider tous les rapports historiques pour un ou tous les sites Web en cliquant sur le bouton \"Invalider les rapports historiques\". Cela les retraite à partir des journaux bruts lors de la prochaine exécution de l'archivage. Forcer Matomo à retraiter les données historiques pour tous les rapports, par exemple lorsque :",
+        "ExamplesCustomReports": "vous avez créé un nouveau %1$srapport personnalisé%2$s et souhaitez traiter toutes les données historiques qu'il contient",
+        "ExamplesFunnels": "vous avez créé un nouveau %1$sFunnel%2$s et souhaitez traiter toutes les données historiques qu'il contient",
+        "ExamplesRawData": "vous avez modifié les informations brutes sur les visiteurs (par exemple en %1$simportant de nouveaux journaux de visiteurs%2$s) et souhaitez que ces modifications brutes des journaux soient reflétées dans tous vos rapports.",
+        "AllWebsites": "tous les sites web",
+        "AllSegments": "tous les segments",
+        "ChooseSegment": "Sélectionner segment",
+        "ChooseWebsite": "Sélectionnez le site web",
+        "ChooseRange": "Sélectionnez la longueur de la période sur laquelle invalider les données",
+        "AllData": "toutes les données historiques",
+        "XMonths": "dernier (s) %1$smois",
+        "LastMonth": "mois dernier",
+        "InvalidationSuccess": "Les rapports ont été invalidés avec succès. Ces rapports seront traités à nouveau la prochaine fois que l'archivage des rapports sera exécuté.",
+        "InvalidateAPIReturn": "CoreAdminHome.invalidateArchivedReports a retourné :",
+        "ConfirmInvalidation": "Vous êtes sur le point d'invalider tous les rapports existants, ce qui entraînera Matomo à analyser tous les rapports à nouveau la prochaine fois que l'archivage s'exécutera. Ré-analyser tous les rapports pourrait prendre beaucoup de temps là prochaine fois que l'archivage des rapports s'exécutera. Êtes-vous sûr(e) de vouloir invalider l'ensemble des rapports pour %1$s et %2$s ?"
+    }
+}

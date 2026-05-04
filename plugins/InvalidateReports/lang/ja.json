@@ -1,0 +1,21 @@
+{
+    "InvalidateReports": {
+        "InvalidateReports": "レポートを無効にする",
+        "InvalidateHistoricalReports": "履歴レポートを無効にする",
+        "PageDescription": "[履歴レポートを無効にする] ボタンをクリックすると、特定の Web サイトまたはすべての Web サイトのすべての履歴レポートを無効にすることができます。 これにより、次にアーカイブが実行されたときに、未加工のログからそれらが再処理されます。 Matomo がすべてのレポートの履歴データを再処理するように強制します。たとえば、次の場合です。",
+        "ExamplesCustomReports": "新しい%1$sカスタム レポート%2$sを作成し、その中のすべての履歴データを処理したい場合",
+        "ExamplesFunnels": "新しい%1$sファネル%2$sを作成し、その中のすべての履歴データを処理したい",
+        "ExamplesRawData": "生のビジター情報を変更し (たとえば、%1$s新しいビジターログをインポート%2$sすることによって)、これらの生のログの変更をすべてのレポートに反映させたい場合。",
+        "AllWebsites": "全ウェブサイト",
+        "AllSegments": "すべてのセグメント",
+        "ChooseSegment": "セグメントを選択",
+        "ChooseWebsite": "ウェブサイトを選択",
+        "ChooseRange": "データを無効にするまでの間隔を選択する",
+        "AllData": "全ての履歴データ",
+        "XMonths": "過去 %1$s ヶ月",
+        "LastMonth": "先月",
+        "InvalidationSuccess": "レポートは無効になりました。 それらは、次にレポートのアーカイブが実行されたときに再処理されます。",
+        "InvalidateAPIReturn": "CoreAdminHome.invalidateArchivedReports API が返されました：",
+        "ConfirmInvalidation": "%1$s と %2$s の履歴レポートをすべて無効にしますか? (これにより、Matomo は次回のアーカイブ実行時にすべての履歴レポートを再処理し、時間がかかる場合があります。)"
+    }
+}

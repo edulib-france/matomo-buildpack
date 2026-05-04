@@ -1,0 +1,21 @@
+{
+    "InvalidateReports": {
+        "InvalidateReports": "Invalidar informes",
+        "InvalidateHistoricalReports": "Invalidar informes históricos",
+        "PageDescription": "Puede invalidar todos los informes históricos de un sitio web específico o de todos los sitios web haciendo clic en el botón \"Invalidar informes históricos\". Esto los reprocesará a partir de los registros sin procesar la próxima vez que se ejecute el archivado. Forzar Matomo para volver a procesar los datos históricos para todos los informes, por ejemplo cuando:",
+        "ExamplesCustomReports": "ha creado un nuevo %1$sInforme personalizado%2$s y desea procesar en él todos los datos históricos",
+        "ExamplesFunnels": "ha creado un nuevo %1$sFunnel%2$s y desea procesar lo en él todos los datos históricos",
+        "ExamplesRawData": "Ha modificado la información de visitantes sin procesar (por ejemplo, %1$simportando nuevos registros de visitantes%2$s) y desea que estos cambios de registro sin procesar se reflejen en todos sus informes.",
+        "AllWebsites": "todos los sitios de internet",
+        "AllSegments": "todos los segmentos",
+        "ChooseSegment": "Escoge un segmento",
+        "ChooseWebsite": "Elege un sitio de internet",
+        "ChooseRange": "Elegir cuanto retroceder para invalidar datos",
+        "AllData": "todos los datos históricos",
+        "XMonths": "últimos %1$s meses",
+        "LastMonth": "último mes",
+        "InvalidationSuccess": "Los informes se han invalidado. Se volverán a procesar la próxima vez que se ejecute el archivo de informes.",
+        "InvalidateAPIReturn": "La API CoreAdminHome.invalidateArchivedReports devolvió:",
+        "ConfirmInvalidation": "¿Invalidar todos los informes históricos de %1$s y %2$s? (Esto hace que Matomo vuelva a procesar todos los informes históricos la próxima vez que se ejecute el archivado y puede llevar mucho tiempo)"
+    }
+}
